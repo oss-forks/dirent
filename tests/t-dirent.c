@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include "dirent.h"
+#include "../dirent.h"
 
 #undef NDEBUG
 #include <assert.h>
