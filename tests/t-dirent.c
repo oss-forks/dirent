@@ -214,60 +214,6 @@ main(
         closedir (dir);
     }
 
-    /* Long file name */
-    {
-        DIR *dir;
-        struct dirent *ent;
-        int found = 0;
-
-        /* Open directory */
-        dir = opendir ("tests/2");
-        if (dir == NULL) {
-            fprintf (stderr, "Directory tests not found\n");
-            abort ();
-        }
-
-        /* Read entries */
-        while ((ent = readdir (dir)) != NULL) {
-
-            /* Check each file */
-            if (strcmp (ent->d_name, ".") == 0) {
-                /* Directory itself */
-                found |= 1;
-
-            } else if (strcmp (ent->d_name, "..") == 0) {
-                /* Parent directory */
-                found |= 2;
-
-            } else if (strcmp (ent->d_name, "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzz") == 0) {
-                /* Regular file */
-#ifdef _DIRENT_HAVE_D_TYPE
-                assert (ent->d_type == DT_REG);
-#endif
-#ifdef _DIRENT_HAVE_D_NAMLEN
-                assert (ent->d_namlen == 255);
-#endif
-#ifdef _D_EXACT_NAMLEN
-                assert (_D_EXACT_NAMLEN(ent) == 255);
-#endif
-#ifdef _D_ALLOC_NAMLEN
-                assert (_D_ALLOC_NAMLEN(ent) > 255);
-#endif
-                found |= 4;
-
-            } else {
-                /* Other file */
-                fprintf (stderr, "Unexpected file %s\n", ent->d_name);
-                abort ();
-            }
-
-        }
-
-        /* Make sure that all files were found */
-        assert (found == 0x7);
-
-        closedir (dir);
-    }
 
 
     printf ("OK\n");
